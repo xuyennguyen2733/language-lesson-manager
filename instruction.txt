@@ -1,0 +1,13 @@
+# Generate a vite project
+
+> RUN npm create vite@latest
+
+> select appropriate options
+
+> cd into the project
+
+> RUN npm install
+
+# Install dependencies
+
+> RUN npm install @mui/material @emotion/react @emotion/styled
