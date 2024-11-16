@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Paper, TextField, Button, Typography, Stack, Chip, Card, CardActions } from '@mui/material';
 
 const App = () => {
@@ -6,6 +6,7 @@ const App = () => {
   const [displayText, setDisplayText] = useState([]);
   const [selectedWords, setSelectedWords] = useState([]);
   const [savedVocab, setSavedVocab] = useState([]);
+  const [highlighted, setHighlighted] = useState([])
   const [lastIndex, setLastIndex] = useState(-1);
   const margin = 2; // margin in rem
 
@@ -29,19 +30,25 @@ const App = () => {
         setSelectedWords(current => ([...current, index]));
       }
       else {
-        setSelectedWords([index])
+        setSelectedWords([index]);
       }
-      setLastIndex(index)
+      setLastIndex(index);
     }
   }
   
   const handleSaveVocab = () => {
     if (selectedWords.length > 0) {
       const newVocab = selectedWords.map((index) => displayText[index]).join(' ')
-      displayText.splice(selectedWords[0], selectedWords[selectedWords.length-1]);
-      displayText.splice(selectedWords[0], 0, newVocab)
-      setSavedVocab(current => [...current, newVocab])
-      setSelectedWords([])
+      const removeCount = selectedWords[selectedWords.length - 1] - selectedWords[0] + 1;
+      
+      displayText.splice(selectedWords[0], removeCount);
+      displayText.splice(selectedWords[0], 0, newVocab);
+      
+      setHighlighted(current => [...current, selectedWords[0]]);
+      
+      setSavedVocab(current => [...current, newVocab]);
+      setSelectedWords([]);
+      setLastIndex(-1);
     }
   }
 
@@ -130,6 +137,7 @@ const App = () => {
             color="primary"
             onClick={handleSubmit}
             sx={{ ml: 2 }}
+            disabled={!!!inputText}
           >
             Submit
           </Button>
