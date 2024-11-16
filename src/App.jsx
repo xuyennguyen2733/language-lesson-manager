@@ -6,7 +6,7 @@ const App = () => {
   const [displayText, setDisplayText] = useState([]);
   const [selectedWords, setSelectedWords] = useState([]);
   const [savedVocab, setSavedVocab] = useState([]);
-  const [highlighted, setHighlighted] = useState([])
+  const [highlighted, setHighlighted] = useState({})
   const [lastIndex, setLastIndex] = useState(-1);
   const margin = 2; // margin in rem
 
@@ -44,7 +44,9 @@ const App = () => {
       displayText.splice(selectedWords[0], removeCount);
       displayText.splice(selectedWords[0], 0, newVocab);
       
-      setHighlighted(current => [...current, selectedWords[0]]);
+      setHighlighted(current => ({...current, [selectedWords[0]]: true}));
+      
+      console.log('index highlighted', selectedWords[0],highlighted);
       
       setSavedVocab(current => [...current, newVocab]);
       setSelectedWords([]);
@@ -76,6 +78,26 @@ const App = () => {
           <Typography variant="h5">Displayed Text:</Typography>
             {
               displayText.length > 0 ? displayText.map((word, index) => {
+                if (!!highlighted[index]) {
+                  console.log('index in highlighted ?', highlighted[index])
+                  return (
+                    <Typography 
+                    key={index}
+                    sx={{
+                      display: 'inline-block',
+                      margin: '0 0.2rem',
+                      backgroundColor: 'green',
+                      fontWeight: 700,
+                      '&:hover': {
+                        backgroundColor: 'pink'
+                      }
+                    }}
+                    onClick={() => handleSelectWords(word, index)}
+                  >
+                    {word} 
+                  </Typography>
+                  )
+                }
                 return (
                   <Typography 
                     key={index}
